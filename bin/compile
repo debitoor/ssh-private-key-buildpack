@@ -1,0 +1,7 @@
+set -e
+
+echo "$SSH_KEY" | base64 --decode > id_rsa
+eval `ssh-agent`
+ssh-add id_rsa
+ssh -oStrictHostKeyChecking=no -T git@github.com
+rm id_rsa
