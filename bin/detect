@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if [ -z "$SSH_KEY" ]; then
 	exit 0
 else

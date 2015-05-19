@@ -1,3 +1,5 @@
+#!/bin/bash
+
 set -e
 
 echo "$SSH_KEY" | base64 --decode > id_rsa
