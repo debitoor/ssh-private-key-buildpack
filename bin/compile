@@ -7,5 +7,5 @@ echo "-----> Running SSH private key setup"
 echo "$SSH_KEY" | base64 --decode > id_rsa
 eval `ssh-agent -s`
 ssh-add id_rsa
-ssh -oStrictHostKeyChecking=no -T git@github.com
+ssh -oStrictHostKeyChecking=no -T git@github.com || true
 rm id_rsa
