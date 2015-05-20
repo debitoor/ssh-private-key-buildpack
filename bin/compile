@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+indent() {
+	c='s/^/       /'
+	case $(uname) in
+		Darwin) sed -l "$c";;
+		*)      sed -u "$c";;
+	esac
+}
+
 env_dir=$3
 ssh_key="$(cat $env_dir/SSH_KEY)"
 
@@ -7,9 +15,9 @@ if [ "$ssh_key" != "" ]; then
 	echo "-----> Running SSH private key setup"
 
 	echo "$ssh_key" | base64 --decode > id_rsa
-	eval `ssh-agent -s` || exit $?
-	ssh-add id_rsa || exit $?
-	ssh -oStrictHostKeyChecking=no -T git@github.com
+	eval `ssh-agent -s` | indent || exit $?
+	ssh-add id_rsa | indent || exit $?
+	ssh -oStrictHostKeyChecking=no -T git@github.com | indent
 	rm id_rsa
 else
 	echo "-----> No SSH private key"
