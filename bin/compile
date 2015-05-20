@@ -6,11 +6,9 @@ ssh_key="$(cat $env_dir/SSH_KEY)"
 if [ "$ssh_key" != "" ]; then
 	echo "-----> Running SSH private key setup"
 
-	echo "$ssh_key" | base64 --decode > id_rsa
-	eval `ssh-agent -s` || exit $?
-	ssh-add id_rsa || exit $?
+	mkdir "$HOME/.ssh"
+	echo "$ssh_key" | base64 --decode > "$HOME/.ssh"
 	ssh -oStrictHostKeyChecking=no -T git@github.com
-	rm id_rsa
 else
 	echo "-----> No SSH private key"
 fi
