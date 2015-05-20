@@ -9,6 +9,7 @@ if [ "$ssh_key" != "" ]; then
 	mkdir "$HOME/.ssh"
 	echo "$ssh_key" | base64 --decode > "$HOME/.ssh"
 	ssh -oStrictHostKeyChecking=no -T git@github.com
+	exit 0
 else
 	echo "-----> No SSH private key"
 fi
