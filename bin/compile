@@ -7,7 +7,7 @@ if [ "$ssh_key" != "" ]; then
 	echo "-----> Running SSH private key setup"
 
 	mkdir "$HOME/.ssh"
-	echo "$ssh_key" | base64 --decode > "$HOME/.ssh"
+	echo "$ssh_key" | base64 --decode > "$HOME/.ssh/id_rsa"
 	ssh -oStrictHostKeyChecking=no -T git@github.com
 	exit 0
 else
