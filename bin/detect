@@ -1,9 +1,4 @@
 #!/usr/bin/env bash
 
-if [ -z "$SSH_KEY" ]; then
-	echo "no"
-	exit 1
-else
-	echo "SSH private key"
-	exit 0
-fi
+echo "SSH private key"
+exit 0
