@@ -10,6 +10,7 @@ function indent() {
 
 ENV_DIR=${3:-}
 ssh_key="$(cat $ENV_DIR/SSH_KEY)"
+ssh_hosts="$(cat $ENV_DIR/SSH_HOSTS)"
 ssh_hosts=${SSH_HOSTS:-"git@github.com"}
 
 if [ "$ssh_key" != "" ]; then
