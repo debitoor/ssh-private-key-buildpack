@@ -12,7 +12,7 @@ ENV_DIR=${3:-}
 ls  $ENV_DIR
 ssh_key="$(cat $ENV_DIR/SSH_KEY)"
 ssh_hosts="$(cat $ENV_DIR/SSH_HOSTS)"
-#ssh_hosts=${SSH_HOSTS:-"git@github.com"}
+ssh_hosts=${ssh_hosts:-"git@github.com"}
 
 if [ "$ssh_key" != "" ]; then
 	echo "-----> Running SSH private key setup"
@@ -23,9 +23,7 @@ if [ "$ssh_key" != "" ]; then
 	ln -s "$1/.ssh" "$HOME/.ssh"
 	echo "$ssh_key" | base64 --decode > "$HOME/.ssh/id_rsa"
 	
-	echo "--> $HOME/.ssh/id_rsa"
-	
-	echo "--> $SSH_HOSTS"
+	echo "--> $ssh_hosts"
 	IFS=',' read -ra HOST <<< "$ssh_hosts"
 	for i in "${HOST[@]}"; do
 		echo "--> $i"
