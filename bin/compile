@@ -9,7 +9,6 @@ function indent() {
 }
 
 ENV_DIR=${3:-}
-ls  $ENV_DIR
 ssh_key="$(cat $ENV_DIR/SSH_KEY)"
 ssh_hosts="$(cat $ENV_DIR/SSH_HOSTS)"
 ssh_hosts=${ssh_hosts:-"git@github.com"}
