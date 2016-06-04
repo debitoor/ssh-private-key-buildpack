@@ -10,7 +10,8 @@ function indent() {
 
 ENV_DIR=${3:-}
 ssh_key="$(cat $ENV_DIR/SSH_KEY)"
-ssh_hosts=${SSH_HOSTS:-"git@github.com"}
+ssh_hosts="$(cat $ENV_DIR/SSH_HOSTS)"
+ssh_hosts=${ssh_hosts:-"git@github.com"}
 
 if [ "$ssh_key" != "" ]; then
 	echo "-----> Running SSH private key setup"
@@ -20,9 +21,11 @@ if [ "$ssh_key" != "" ]; then
 	mkdir "$1/.ssh"
 	ln -s "$1/.ssh" "$HOME/.ssh"
 	echo "$ssh_key" | base64 --decode > "$HOME/.ssh/id_rsa"
-
+	
+	echo "--> $ssh_hosts"
 	IFS=',' read -ra HOST <<< "$ssh_hosts"
 	for i in "${HOST[@]}"; do
+		echo "--> $i"
 		ssh -oStrictHostKeyChecking=no -T $i 2>&1 | indent
 	done
 
