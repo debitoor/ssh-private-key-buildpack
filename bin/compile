@@ -9,17 +9,24 @@ function indent() {
 }
 
 ENV_DIR=${3:-}
-aws_key_id="$(cat $ENV_DIR/AWS_DEPLOY_KEY_ID)"
-aws_key_secret="$(cat $ENV_DIR/AWS_DEPLOY_KEY_SECRET)"
-aws_region="$(cat $ENV_DIR/AWS_REGION)"
-ssh_paramstore_name="$(cat $ENV_DIR/DEPLOY_KEY_PSTORE_NAME)"
-echo "-----> Installing AwsCli"
-apt-get update
-apt-get install awscli
-echo "-----> Configuring up AwsCli"
-aws configure set aws_access_key_id "$aws_key_id" aws_secret_access_key "$aws_key_secret"
-echo "-----> Getting SSH Key From ParamStore [$ssh_paramstore_name] / Region [$aws_region]"
-ssh_key="$(aws ssm get-parameter --name $ssh_paramstore_name --with-decryption --region $aws_region  --query 'Parameter.Value' | base64)"
+use_paramstore="$(cat $ENV_DIR/SSH_USE_AWS_PS)"
+if [ "$use_paramstore" == "true" ]; then
+	echo "-----> Using AWS Param Store"
+	aws_key_id="$(cat $ENV_DIR/AWS_DEPLOY_KEY_ID)"
+	aws_key_secret="$(cat $ENV_DIR/AWS_DEPLOY_KEY_SECRET)"
+	aws_region="$(cat $ENV_DIR/AWS_REGION)"
+	ssh_paramstore_name="$(cat $ENV_DIR/DEPLOY_KEY_PSTORE_NAME)"
+	echo "-----> Installing AwsCli"
+	apt-get update
+	apt-get install awscli
+	echo "-----> Configuring up AwsCli"
+	aws configure set aws_access_key_id "$aws_key_id" aws_secret_access_key "$aws_key_secret"
+	echo "-----> Getting SSH Key From ParamStore [$ssh_paramstore_name] / Region [$aws_region]"
+	ssh_key="$(aws ssm get-parameter --name $ssh_paramstore_name --with-decryption --region $aws_region  --query 'Parameter.Value' | base64)"
+else
+	echo "-----> Getting From Env"
+	ssh_key="$(cat $ENV_DIR/SSH_KEY)"
+fi
 ssh_hosts=${SSH_HOSTS:-"git@github.com"}
 
 if [ "$ssh_key" != "" ]; then
