@@ -10,7 +10,9 @@ function indent() {
 
 ENV_DIR=${3:-}
 ssh_key="$(cat $ENV_DIR/SSH_KEY)"
-ssh_hosts=${SSH_HOSTS:-"git@github.com"}
+ssh_hosts="$(cat $ENV_DIR/SSH_HOSTS)"
+ssh_hosts=${ssh_hosts:-"git@github.com"}
+echo "Using hosts: $ssh_hosts"
 
 if [ "$ssh_key" != "" ]; then
 	echo "-----> Running SSH private key setup"
